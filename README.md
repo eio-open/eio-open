@@ -1,6 +1,6 @@
-# OpenGlasses SDK
+# EIO OpenGlasses SDK
 
-Welcome to the **OpenGlasses SDK** — an early‑access software kit and documentation set for building Android 9–based AR experiences on the Star1s reference hardware (480 × 320 display).
+Welcome to the **EIO OpenGlasses SDK** — an early‑access software kit and documentation set for building Android 9–based AR experiences on the Star1s reference hardware (480 × 320 display).
 
 > **Status:** proof‑of‑concept, pre‑production hardware; APIs and structure will change.
 
