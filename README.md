@@ -10,9 +10,8 @@ Welcome to the **EIO OpenGlasses SDK** — an early‑access software kit and d
 
 | Feature | Spec                                 |
 | ------- | ------------------------------------ |
-| Display | 480 × 320 monocular LCD              |
-| OS      | webOS 3.0 (Android 9 AOSP base)      |
-| CPU     | **TODO**                             |
+| Display | 480 × 320 monocular screen              |
+| OS      | webOS 2.23 (Android 9 AOSP base)      |
 | Sensors | Camera, Mic, IMU, Touchpad/KeyEvents |
 | I/O     | BT/BLE, Wi‑Fi                        |
 
