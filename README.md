@@ -20,10 +20,9 @@ Welcome to the **EIO OpenGlasses SDK** — an early‑access software kit and d
 ---
 
 ## Quick Start (5 min)
-
 ```bash
-git clone https://github.com/openglassexample/openglasses-sdk.git
-cd openglasses-sdk
+git clone https://github.com/eio-open/eio-open.git
+cd eio-open
 ./gradlew :demos:hello-glasses:installDebug
 ```
 
