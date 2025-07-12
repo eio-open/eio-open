@@ -1,16 +1,81 @@
-## Hi there 👋
+# OpenGlasses SDK
 
-<!--
-**eio-open/eio-open** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Welcome to the **OpenGlasses SDK** — an early‑access software kit and documentation set for building Android 9–based AR experiences on the Star1s reference hardware (480 × 320 display).
 
-Here are some ideas to get you started:
+> **Status:** proof‑of‑concept, pre‑production hardware; APIs and structure will change.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+---
+
+## Hardware at a Glance
+
+| Feature | Spec                                 |
+| ------- | ------------------------------------ |
+| Display | 480 × 320 monocular LCD              |
+| OS      | webOS 3.0 (Android 9 AOSP base)      |
+| CPU     | **TODO**                             |
+| Sensors | Camera, Mic, IMU, Touchpad/KeyEvents |
+| I/O     | BT/BLE, Wi‑Fi                        |
+
+*(Replace placeholders as the spec firms up.)*
+
+---
+
+## Quick Start (5 min)
+
+```bash
+git clone https://github.com/openglassexample/openglasses-sdk.git
+cd openglasses-sdk
+./gradlew :demos:hello-glasses:installDebug
+```
+
+Connect the glasses in **ADB** mode, run the app, and you should see:
+
+* Camera preview
+* Key event logger
+* Voice recording & TTS echo
+  *(GIF in /docs/screenshots soon)*
+
+---
+
+## Repository Layout
+
+```
+/
+├── README.md               ← you are here
+├── docs/                   ← Markdown‑converted vendor docs
+├── glasses-sdk/            ← Thin Kotlin/Java wrapper around vendor APIs
+├── demos/
+│   └── hello-glasses/      ← Minimal runnable demo
+├── .github/                ← Issue & PR templates, CI workflows
+└── build.gradle[.kts] etc.
+```
+
+A pristine copy of the vendor examples lives on the **`vendor-sdk` branch**.
+Switch with:
+
+```bash
+git fetch origin vendor-sdk:vendor-sdk
+git switch vendor-sdk
+```
+
+---
+
+## Roadmap
+
+| Milestone  | Target                                 | ETA        |
+| ---------- | -------------------------------------- | ---------- |
+| **Day 0**  | Repo skeleton, CI green                | ✔︎         |
+| **Day 7**  | Wrapper v0, Hello‑Glasses demo         | 2025‑07‑19 |
+| **Day 14** | Public announcement, draft release APK | 2025‑07‑26 |
+
+---
+
+## Contributing
+
+We welcome early feedback via Issues & Discussions. PRs are accepted after 2025‑08‑01.
+
+---
+
+## License
+
+The current repository is released *as‑is* without an explicit OSS license while hardware & legal reviews are in progress. By contributing you agree to allow relicensing under an OSI‑approved license in the future.
