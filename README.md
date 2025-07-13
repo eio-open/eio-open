@@ -1,12 +1,21 @@
-# EIO OpenGlasses SDK
+# EIO Glasses webOS Demo
 
-Welcome to the **EIO OpenGlasses SDK** — an early‑access software kit and documentation set for building Android 9–based AR experiences on the Star1s reference hardware (480 × 320 display).
+Welcome to the **EIO OpenGlasses SDK** — an early‑access software kit and documentation set for building AR experiences on the Star1s reference hardware (480 × 320 display).
+
+This repository contains a minimal demo web application for EIO Glasses, designed to run on the webOS OSE Emulator.
 
 > **Status:** proof‑of‑concept, pre‑production hardware; APIs and structure will change.
 
 ---
 
-## Hardware at a Glance
+## Prerequisites
+
+Before you begin, you need to install:
+
+- **Node.js** and **npm**
+- **Oracle VirtualBox**
+- **webOS OSE Emulator** (runs in VirtualBox)
+- **webOS CLI tools** (`ares-cli`)
 
 | Feature | Spec                                 |
 | ------- | ------------------------------------ |
@@ -15,62 +24,76 @@ Welcome to the **EIO OpenGlasses SDK** — an early‑access software kit and d
 | Sensors | Camera, Mic, IMU, Touchpad/KeyEvents |
 | I/O     | BT/BLE, Wi‑Fi                        |
 
-*(Replace placeholders as the spec firms up.)*
+**For detailed installation instructions, see the official webOS OSE Emulator User Guide:**  
+👉 [webOS OSE Emulator User Guide](https://www.webosose.org/docs/tools/sdk/emulator/virtualbox-emulator/emulator-user-guide/)
+
+This guide covers:
+- How to install VirtualBox
+- How to download and import the webOS OSE Emulator
+- How to install the webOS CLI tools (`ares-cli`)
+- How to start and use the emulator
 
 ---
 
-## Quick Start (5 min)
-```bash
-git clone https://github.com/eio-open/eio-open.git
-cd eio-open
-./gradlew :demos:hello-glasses:installDebug
-```
+## Quick Start
 
-Connect the glasses in **ADB** mode, run the app, and you should see:
+1. **Clone this repository:**
+    ```bash
+    git clone <your-repo-url>
+    cd eio-open/platforms/webos/hello-eio-glasses-webos
+    ```
+
+2. **Package the app:**
+    ```bash
+    ares-package .
+    ```
+    This will create a `.ipk` file in the current directory.
+
+3. **Start the webOS Emulator:**
+    - Open VirtualBox and start the imported webOS OSE VM.
+    - Wait for the emulator to fully boot (you should see the webOS home screen).
+
+4. **Install the app on the emulator:**
+    ```bash
+    ares-install -d emulator com.eio.demo.glasses_0.0.1_all.ipk
+    ```
 
 * Camera preview
 * Key event logger
 * Voice recording & TTS echo
   *(GIF in /docs/screenshots soon)*
 
+5. **Launch the app:**
+    ```bash
+    ares-launch -d emulator com.eio.demo.glasses
+    ```
 ---
 
-## Repository Layout
+## Project Structure
 
 ```
-/
-├── README.md               ← you are here
-├── docs/                   ← Markdown‑converted vendor docs
-├── glasses-sdk/            ← Thin Kotlin/Java wrapper around vendor APIs
-├── demos/
-│   └── hello-glasses/      ← Minimal runnable demo
-├── .github/                ← Issue & PR templates, CI workflows
-└── build.gradle[.kts] etc.
-```
-
-A pristine copy of the vendor examples lives on the **`vendor-sdk` branch**.
-Switch with:
-
-```bash
-git fetch origin vendor-sdk:vendor-sdk
-git switch vendor-sdk
+platforms/webos/hello-eio-glasses-webos/
+├── appinfo.json      # App manifest
+├── index.html        # Main HTML file
+├── app.js            # Main JavaScript logic
+├── icon.png          # App icon
+└── views/
+    └── MainPanel.jsx # Main view (if using Enact/React)
 ```
 
 ---
 
-## Roadmap
+## Troubleshooting
 
-| Milestone  | Target                                 | ETA        |
-| ---------- | -------------------------------------- | ---------- |
-| **Day 0**  | Repo skeleton, CI green                | ✔︎         |
-| **Day 7**  | Wrapper v0, Hello‑Glasses demo         | 2025‑07‑19 |
-| **Day 14** | Public announcement, draft release APK | 2025‑07‑26 |
+- If you get a connection error (`ECONNREFUSED`), make sure the emulator is running and fully booted.
+- If you have issues with packaging, check that all JSX files use the `.jsx` extension.
 
 ---
 
-## Contributing
+## More Information
 
-We welcome early feedback via Issues & Discussions. PRs are accepted after 2025‑08‑01.
+For advanced usage, troubleshooting, and emulator tips, refer to:  
+👉 [webOS OSE Emulator User Guide](https://www.webosose.org/docs/tools/sdk/emulator/virtualbox-emulator/emulator-user-guide/)
 
 ---
 

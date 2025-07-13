@@ -1,0 +1,10 @@
+{
+  "id": "com.eio.demo.glasses",
+  "version": "0.0.1",
+  "vendor": "EIO",
+  "type": "web",
+  "main": "index.html",
+  "title": "EIO Glasses Demo",
+  "uiRevision": 2,
+  "icon": "icon.png"
+}
