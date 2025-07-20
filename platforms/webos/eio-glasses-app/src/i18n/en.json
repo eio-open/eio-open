@@ -1,0 +1,22 @@
+{
+  "title": {
+    "app": "AR Shell"
+  },
+  "panel": {
+    "title": "Quick Settings",
+    "section": {
+      "wifi": "Wi-Fi",
+      "locale": "Locale",
+      "status": "Status"
+    }
+  },
+  "button": {
+    "close": "Close",
+    "toggle": "Settings"
+  },
+  "locale": {
+    "title": "Language",
+    "select": "Select Language",
+    "current": "Current Language"
+  }
+} 

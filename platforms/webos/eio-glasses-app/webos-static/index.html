@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Shell</title>
+    <style>
+        /* AR Shell - 480×320 Viewport Styles */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Viewport container - exactly 480×320 */
+        #viewport {
+            width: 480px;
+            height: 320px;
+            margin: 0 auto;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Root container fills viewport */
+        #root {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* Shell layout */
+        .shell-root {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: #111;
+            color: #fff;
+        }
+
+        /* Status bar - fixed 24px height */
+        .status-bar {
+            height: 24px;
+            background: #222;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8px;
+            font-size: 12px;
+            cursor: pointer;
+            user-select: none;
+            min-height: 44px; /* Touch target minimum */
+        }
+
+        .status-bar:hover {
+            background: #333;
+        }
+
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-icon {
+            font-size: 14px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .status-text {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* Content area - remaining 296px */
+        .content-area {
+            flex: 1;
+            height: 296px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Quick Settings Panel - full screen overlay */
+        .settings-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .settings-panel.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .panel-content {
+            width: 100%;
+            height: 100%;
+            background: #222;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            height: 44px;
+            background: #333;
+            border-bottom: 1px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            min-height: 44px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-button:hover {
+            background: #444;
+            color: #fff;
+        }
+
+        .panel-sections {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .section {
+            margin-bottom: 16px;
+            background: #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            padding: 12px;
+            background: #444;
+            border-bottom: 1px solid #555;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            padding: 12px;
+            color: #ccc;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* Wi-Fi network list */
+        .wifi-list {
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .wifi-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+            min-height: 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .wifi-item:last-child {
+            border-bottom: none;
+        }
+
+        .wifi-name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .wifi-details {
+            color: #999;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        /* Locale selector */
+        .locale-list {
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .locale-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .locale-item:hover {
+            background-color: #444;
+        }
+
+        .locale-item.selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .locale-item:last-child {
+            border-bottom: none;
+        }
+
+        .locale-name {
+            font-weight: 500;
+            font-size: 13px;
+            color: inherit;
+        }
+
+        .locale-check {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Buttons */
+        .btn {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            min-height: 44px;
+            min-width: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        /* Loading state */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #ccc;
+            font-size: 12px;
+        }
+
+        /* Error state */
+        .error {
+            color: #ff6b6b;
+            font-size: 12px;
+            padding: 8px;
+        }
+
+        /* Focus styles for rotary navigation */
+        .focused {
+            outline: 2px solid #00BFFF !important;
+            outline-offset: 2px;
+            background-color: rgba(0, 191, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        /* Focusable elements */
+        [data-focusable="true"] {
+            cursor: pointer;
+            transition: outline 0.2s ease, background-color 0.2s ease;
+        }
+
+        [data-focusable="true"]:hover {
+            outline: 1px solid #00BFFF;
+            outline-offset: 1px;
+        }
+
+        /* Test button styles */
+        .test-button {
+            padding: 12px 16px;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            min-width: 200px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .test-button:hover {
+            background-color: #555;
+        }
+
+        /* Debug panel styles */
+        .debug-panel {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #007acc;
+            font-family: monospace;
+            font-size: 10px;
+            width: 200px;
+            margin: 10px;
+        }
+
+        .debug-panel h4 {
+            margin: 0 0 8px 0;
+            color: #007acc;
+            font-size: 12px;
+        }
+
+        .debug-panel div {
+            line-height: 1.3;
+            font-size: 10px;
+        }
+
+        /* Desktop browser centering */
+        @media (min-width: 481px) {
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                margin: 0;
+                background: #000;
+            }
+            
+            #viewport {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        /* Mobile/emulator viewport */
+        @media (max-width: 480px) {
+            #viewport {
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="viewport">
+        <div id="root">
+            <div class="shell-root">
+                <div class="status-bar" onclick="togglePanel()">
+                    <div class="status-left">
+                        <span class="status-icon">🕑</span>
+                        <span class="status-text" id="current-time">--:--</span>
+                    </div>
+                    
+                    <div class="status-right">
+                        <span class="status-icon">📶</span>
+                        <span class="status-icon">🔋</span>
+                        <span class="status-text">85%</span>
+                    </div>
+                </div>
+                
+                <div class="content-area">
+                    <div style="display: flex; height: 100%;">
+                        <!-- Left side: Main content -->
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; font-size: 14px; gap: 20px;">
+                            <div style="text-align: center;">
+                                <div id="locale-display">System locale: Loading...</div>
+                                <div style="margin-top: 8px; font-size: 12px;">
+                                    Tap status bar or press F1 for settings
+                                </div>
+                            </div>
+                            
+                            <!-- Test buttons for debugging -->
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <button class="test-button" onclick="testStatusBarClick()">
+                                    Test Focus - Status Bar
+                                </button>
+                                
+                                <button class="test-button" onclick="testDirectToggle()">
+                                    Test Focus - Direct Toggle
+                                </button>
+                                
+                                <button class="test-button" onclick="debugFocusState()">
+                                    Debug Focus State
+                                </button>
+                                
+                                <button class="test-button" onclick="forceFocusToStatusBar()">
+                                    Force Focus to Status Bar
+                                </button>
+                                
+                                <button class="test-button" onclick="emergencyRecovery()">
+                                    Emergency Recovery
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Right side: Debug panel -->
+                        <div class="debug-panel" id="debug-panel">
+                            <h4>Debug Info</h4>
+                            <div><strong>Index:</strong> <span id="debug-index">-1</span></div>
+                            <div><strong>Elements:</strong> <span id="debug-elements">0</span></div>
+                            <div><strong>View:</strong> <span id="debug-view">none</span></div>
+                            <div><strong>Focused:</strong> <span id="debug-focused">0</span></div>
+                            <div><strong>Element:</strong> <span id="debug-element">none</span></div>
+                            <div><strong>Handler:</strong> <span id="debug-handler">none</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-panel" id="settings-panel">
+                        <div class="panel-content">
+                            <div class="panel-header">
+                                <h2 class="panel-title" id="panel-title">Quick Settings</h2>
+                                <button class="close-button" onclick="closePanel()">×</button>
+                            </div>
+                            
+                            <div class="panel-sections">
+                                <div class="section">
+                                    <h3 class="section-title" id="wifi-title">Wi-Fi</h3>
+                                    <div class="section-content" id="wifi-content">
+                                        Wi-Fi networks will be displayed here
+                                    </div>
+                                </div>
+                                
+                                <div class="section">
+                                    <h3 class="section-title" id="locale-title">Locale</h3>
+                                    <div class="section-content" id="locale-content">
+                                        Language settings will be displayed here
+                                    </div>
+                                </div>
+                                
+                                <div class="section">
+                                    <h3 class="section-title" id="status-title">Status</h3>
+                                    <div class="section-content">
+                                        System status information will be displayed here
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

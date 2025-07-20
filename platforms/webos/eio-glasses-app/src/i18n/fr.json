@@ -1,0 +1,22 @@
+{
+  "title": {
+    "app": "Coquille AR"
+  },
+  "panel": {
+    "title": "Paramètres Rapides",
+    "section": {
+      "wifi": "Wi-Fi",
+      "locale": "Langue",
+      "status": "Statut"
+    }
+  },
+  "button": {
+    "close": "Fermer",
+    "toggle": "Paramètres"
+  },
+  "locale": {
+    "title": "Langue",
+    "select": "Sélectionner la langue",
+    "current": "Langue actuelle"
+  }
+} 

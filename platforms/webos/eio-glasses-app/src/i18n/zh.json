@@ -1,0 +1,22 @@
+{
+  "title": {
+    "app": "AR 外壳"
+  },
+  "panel": {
+    "title": "快速设置",
+    "section": {
+      "wifi": "Wi-Fi",
+      "locale": "语言",
+      "status": "状态"
+    }
+  },
+  "button": {
+    "close": "关闭",
+    "toggle": "设置"
+  },
+  "locale": {
+    "title": "语言",
+    "select": "选择语言",
+    "current": "当前语言"
+  }
+} 

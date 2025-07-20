@@ -1,0 +1,13 @@
+{
+  "id": "com.example.arshell",
+  "version": "0.0.5",
+  "type": "web",
+  "main": "index.html",
+  "title": "AR Shell",
+  "icon": "icon.png",
+  "requiredPermissions": ["networkconnection.query", "settings.read", "settings.write"],
+  "permissions": [
+    { "service": "com.webos.service.wifi", "operations": ["getNetworks"] },
+    { "service": "com.webos.settingsservice", "operations": ["getSystemSettings", "setSystemSettings"] }
+  ]
+} 
